@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import './App.css'
 import Home from './pages/Home'
 import Favorites from './pages/Favorites'
 import { Routes, Route } from 'react-router-dom'
 import NavBar from './components/NavBar'
+import './css/App.css'
+
 
 function App() {
   
 
   return (
-    <>
+    
     <div>
       <NavBar />
     
@@ -20,7 +21,7 @@ function App() {
         </Routes>
       </main>
       </div>
-    </>
+    
   )
   
 }

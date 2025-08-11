@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom'
+
 function NavBar () {
   return (
     <nav className="navbar">
@@ -6,6 +8,7 @@ function NavBar () {
       </div>
       <div className="nav-links">
         <Link to="/">Home</Link>
+        <br/>
         <Link to="/favorites">Favorites</Link>
       </div>
     </nav>
