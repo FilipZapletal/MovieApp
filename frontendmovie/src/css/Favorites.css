@@ -1,8 +1,13 @@
 .favorites {
   padding: 2rem;
-  width: 100%;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column; /* <-- header above grid */
+  gap: 1rem;
 }
+
+
 
 .favorites h2 {
   margin-bottom: 2rem;
@@ -46,6 +51,11 @@
   }
 }
 
-.movies-grid > * {
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: start;
+  justify-items: stretch;
   animation: fadeIn 0.3s ease-out forwards;
 }
