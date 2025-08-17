@@ -1,0 +1,214 @@
+/* ==== FilterBar – aligned grid, consistent heights ==== */
+
+:root {
+  --fb-bg: rgba(18,18,20,0.85);
+  --fb-border: rgba(255,255,255,0.10);
+  --fb-border-strong: rgba(138,180,255,0.65);
+  --fb-soft: rgba(255,255,255,0.06);
+  --fb-soft-2: rgba(25,25,28,0.9);
+  --fb-text: #fff;
+  --fb-muted: rgba(255,255,255,0.82);
+  --fb-radius: 12px;
+  --ctrl-h: 40px;      /* unified control height */
+  --gap: 12px;
+}
+
+/* Inputs/selects: consistent height */
+.input, .select {
+  height: var(--ctrl-h);
+  line-height: var(--ctrl-h);
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--fb-soft-2);
+  color: var(--fb-text);
+  outline: none;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  appearance: none;           /* reset browser styles */
+  -moz-appearance: textfield; /* fix Firefox number input */
+}
+
+/* Hide number input arrows (Chrome, Safari, Edge) */
+.input[type=number]::-webkit-outer-spin-button,
+.input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Wrapper */
+.filterbar {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--fb-bg);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--fb-border);
+}
+
+/* Grid container */
+.filterbar__inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  align-items: end;                     /* align baselines */
+  box-sizing: border-box;
+}
+
+/* Field card */
+.field {
+  grid-column: span 3;                  /* default width */
+  display: grid;
+  grid-template-rows: auto var(--ctrl-h);
+  gap: 8px;
+  background: var(--fb-soft);
+  border: 1px solid var(--fb-border);
+  border-radius: var(--fb-radius);
+  padding: 10px;
+  position: relative;                   /* for z-index lift */
+  box-sizing: border-box;
+}
+
+/* Specific widths so total = 12 cols (3+2+5+2) + reset(2) = wrap ok */
+.field--range  { grid-column: span 3; }
+.field--year   { grid-column: span 2; }
+.field--genres { grid-column: span 5; }
+.field--sort   { grid-column: span 2; }
+.field--reset  { grid-column: span 2; display: flex; align-items: center; }
+
+/* Lift on hover/focus without shifting borders into neighbors */
+.field:hover,
+.field:focus-within {
+  z-index: 1;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  outline: 2px solid transparent;       /* prevent layout shift */
+  border-color: var(--fb-border-strong);
+}
+
+/* Labels */
+.label {
+  font-size: 0.82rem;
+  color: var(--fb-muted);
+  line-height: 1;
+}
+
+/* Inputs/selects: consistent height */
+.input, .select {
+  height: var(--ctrl-h);
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--fb-soft-2);
+  color: var(--fb-text);
+  outline: none;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+.input:focus, .select:focus {
+  border-color: var(--fb-border-strong);
+  box-shadow: 0 0 0 3px rgba(138,180,255,0.18);
+}
+
+/* Range (rating) – keep same visual height */
+.field--range .range-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  height: var(--ctrl-h);
+  gap: 10px;
+}
+.field--range input[type="range"] {
+  width: 100%;
+  accent-color: var(--fb-border-strong);
+  height: 4px;
+}
+.range-value {
+  min-width: 44px;
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--fb-text);
+}
+
+/* Genre chips — aligned, no borders bleeding */
+.field--genres .chips {
+  height: var(--ctrl-h);
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+.field--genres .chips__scroll {
+  display: inline-flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px;                     /* inner padding so borders don’t touch card edge */
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+.chip {
+  height: 28px; line-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.08);
+  color: var(--fb-text);
+  font-size: 0.9rem;
+  display: inline-flex; align-items: center;
+  cursor: pointer;
+  transition: transform .08s ease, background .15s ease, border-color .15s;
+  white-space: nowrap;
+  position: relative;
+}
+.chip:hover { transform: translateY(-1px); }
+.chip--active {
+  background: rgba(138,180,255,0.22);
+  border-color: var(--fb-border-strong);
+}
+
+/* Reset button */
+.btn-reset {
+  width: 100%;
+  height: var(--ctrl-h);
+  padding: 0 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  color: #eee;
+  border: 1px dashed rgba(255,255,255,0.28);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.btn-reset:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: var(--fb-border-strong);
+}
+
+/* Search note (when search is active) */
+.search-note {
+  grid-column: 1 / -1;
+  padding: 10px 12px;
+  background: var(--fb-soft);
+  border: 1px solid var(--fb-border);
+  border-radius: var(--fb-radius);
+  color: #eee;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .field--genres { grid-column: span 6; }
+  .field--range  { grid-column: span 3; }
+  .field--year   { grid-column: span 3; }
+  .field--sort   { grid-column: span 3; }
+  .field--reset  { grid-column: span 3; }
+}
+@media (max-width: 780px) {
+  .filterbar__inner { grid-template-columns: repeat(6, 1fr); }
+  .field,
+  .field--genres,
+  .field--range,
+  .field--year,
+  .field--sort,
+  .field--reset,
+  .search-note { grid-column: 1 / -1; }
+}
